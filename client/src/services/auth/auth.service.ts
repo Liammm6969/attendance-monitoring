@@ -21,12 +21,15 @@ export const authService = {
       body: JSON.stringify(data),
     }).then(handleResponse),
 
-  verifyOtp: (email: string, otp: string) =>
+  verifySignupOtp: (email: string, otp: string) =>
     fetch(`${API}/auth/verify-signup-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp }),
     }).then(handleResponse),
+
+  verifyOtp: (email: string, otp: string) =>
+    authService.verifySignupOtp(email, otp),
 
   forgotPassword: (email: string) =>
     fetch(`${API}/auth/forgot-password`, {

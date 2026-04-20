@@ -84,8 +84,8 @@ export const QRScanPage = () => {
   return (
     <div className="max-w-md mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Scan QR Code</h1>
-        <p className="text-slate-400 text-sm mt-1">Point your camera at the company QR code to time in</p>
+        <h1 className="text-2xl font-bold text-slate-900">Scan QR Code</h1>
+        <p className="text-slate-600 text-sm mt-1">Point your camera at the company QR code to time in</p>
       </div>
 
       {locationError && (
@@ -107,15 +107,15 @@ export const QRScanPage = () => {
       )}
 
       {/* Scanner area */}
-      <div className="bg-[#0a1628] border border-white/5 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         {state === "idle" && (
           <div className="p-8 flex flex-col items-center gap-4 text-center">
             <div className="w-20 h-20 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
               <QrCode size={36} className="text-indigo-400" />
             </div>
             <div>
-              <p className="text-white font-semibold">Ready to Scan</p>
-              <p className="text-slate-400 text-sm mt-1">Make sure you're at your OJT workplace</p>
+              <p className="text-slate-900 font-semibold">Ready to Scan</p>
+              <p className="text-slate-600 text-sm mt-1">Make sure you're at your OJT workplace</p>
             </div>
             <button
               onClick={startScanner}
@@ -131,7 +131,7 @@ export const QRScanPage = () => {
           <div>
             <div id="qr-reader" ref={containerRef} className="w-full" />
             <div className="p-4 text-center">
-              <button onClick={() => { stopScanner(); setState("idle"); }} className="text-sm text-slate-400 hover:text-white transition-colors">
+              <button onClick={() => { stopScanner(); setState("idle"); }} className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
                 Cancel
               </button>
             </div>
@@ -141,7 +141,7 @@ export const QRScanPage = () => {
         {(state === "locating" || state === "submitting") && (
           <div className="p-10 flex flex-col items-center gap-4 text-center">
             <Loader2 size={36} className="text-indigo-400 animate-spin" />
-            <p className="text-white font-medium">{message}</p>
+            <p className="text-slate-900 font-medium">{message}</p>
             {scannedValue && <p className="text-slate-500 text-xs font-mono">QR: {scannedValue}</p>}
           </div>
         )}
@@ -153,7 +153,7 @@ export const QRScanPage = () => {
             </div>
             <div>
               <p className="text-emerald-400 font-bold text-lg">Timed In!</p>
-              <p className="text-slate-300 text-sm mt-1">{message}</p>
+              <p className="text-slate-700 text-sm mt-1">{message}</p>
             </div>
             <button
               onClick={() => navigate("/student/dashboard")}
@@ -171,7 +171,7 @@ export const QRScanPage = () => {
             </div>
             <div>
               <p className="text-red-400 font-bold text-lg">Failed</p>
-              <p className="text-slate-300 text-sm mt-1">{message}</p>
+              <p className="text-slate-700 text-sm mt-1">{message}</p>
             </div>
             <button
               onClick={() => setState("idle")}

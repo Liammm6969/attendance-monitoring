@@ -51,8 +51,8 @@ export const AdminReportsPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Reports</h1>
-          <p className="text-slate-400 text-sm mt-1">Generate DTR reports for each intern</p>
+          <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
+          <p className="text-slate-600 text-sm mt-1">Generate DTR reports for each intern</p>
         </div>
         {selected && (
           <button onClick={handleExportPDF} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-indigo-500/25">
@@ -66,19 +66,19 @@ export const AdminReportsPage = () => {
         <div className="space-y-3">
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search interns..." className="w-full pl-8 pr-4 py-2.5 bg-[#0a1628] border border-white/5 rounded-xl text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/40" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search interns..." className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500/40" />
           </div>
           <div className="space-y-2 max-h-[60vh] overflow-y-auto">
             {loadingInterns ? (
               <div className="flex justify-center py-6"><div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" /></div>
             ) : filteredInterns.map((intern) => (
               <button key={intern._id} onClick={() => handleSelectIntern(intern)}
-                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${selected?._id === intern._id ? "bg-indigo-600 border-indigo-500" : "bg-[#0a1628] border-white/5 hover:border-white/10"} border`}>
+                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${selected?._id === intern._id ? "bg-indigo-600 border-indigo-500" : "bg-white border-slate-200 hover:border-indigo-200"} border`}>
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                   {intern.firstName?.[0]}{intern.lastName?.[0]}
                 </div>
                 <div className="min-w-0">
-                  <p className={`text-sm font-medium truncate ${selected?._id === intern._id ? "text-white" : "text-slate-300"}`}>{intern.firstName} {intern.lastName}</p>
+                  <p className={`text-sm font-medium truncate ${selected?._id === intern._id ? "text-white" : "text-slate-800"}`}>{intern.firstName} {intern.lastName}</p>
                   <p className={`text-xs truncate ${selected?._id === intern._id ? "text-indigo-200" : "text-slate-500"}`}>{(intern.totalHours || 0).toFixed(1)}h / {REQUIRED_HOURS}h</p>
                 </div>
               </button>
@@ -89,7 +89,7 @@ export const AdminReportsPage = () => {
         {/* DTR Report */}
         <div className="lg:col-span-2">
           {!selected ? (
-            <div className="bg-[#0a1628] border border-white/5 rounded-2xl py-20 text-center">
+            <div className="bg-white border border-slate-200 rounded-2xl py-20 text-center">
               <Users size={32} className="text-slate-600 mx-auto mb-3" />
               <p className="text-slate-400 text-sm">Select an intern to view their DTR</p>
             </div>

@@ -46,32 +46,32 @@ export const InternsPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Interns</h1>
-        <p className="text-slate-400 text-sm mt-1">Manage all registered OJT students</p>
+        <h1 className="text-2xl font-bold text-slate-900">Interns</h1>
+        <p className="text-slate-600 text-sm mt-1">Manage all registered OJT students</p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name or email..." className="w-full pl-9 pr-4 py-2.5 bg-[#0a1628] border border-white/5 rounded-xl text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/40 transition-colors" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name or email..." className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-colors" />
         </div>
         <div className="flex gap-2">
           {["all", "assigned", "unassigned"].map((f) => (
-            <button key={f} onClick={() => setFilter(f)} className={`px-3 py-2 text-xs font-medium rounded-xl capitalize transition-all ${filter === f ? "bg-indigo-600 text-white" : "bg-[#0a1628] text-slate-400 border border-white/5 hover:text-white"}`}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={`px-3 py-2 text-xs font-medium rounded-xl capitalize transition-all ${filter === f ? "bg-indigo-600 text-white" : "bg-white text-slate-600 border border-slate-200 hover:text-slate-900"}`}>{f}</button>
           ))}
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-[#0a1628] border border-white/5 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         {filtered.length === 0 ? (
           <div className="py-12 text-center"><Users size={28} className="text-slate-600 mx-auto mb-2" /><p className="text-slate-500 text-sm">No interns found</p></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/5">
+                <tr className="border-b border-slate-200">
                   <th className="px-5 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Intern</th>
                   <th className="hidden md:table-cell px-5 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Company</th>
                   <th className="hidden lg:table-cell px-5 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Progress</th>
@@ -79,31 +79,31 @@ export const InternsPage = () => {
                   <th className="px-5 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-200">
                 {filtered.map((intern) => {
                   const progress = Math.min(((intern.totalHours || 0) / REQUIRED_HOURS) * 100, 100);
                   return (
-                    <tr key={intern._id} className="hover:bg-white/2 transition-colors">
+                    <tr key={intern._id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                             {intern.firstName?.[0]}{intern.lastName?.[0]}
                           </div>
                           <div>
-                            <p className="text-white font-medium">{intern.firstName} {intern.lastName}</p>
+                            <p className="text-slate-900 font-medium">{intern.firstName} {intern.lastName}</p>
                             <p className="text-slate-500 text-xs">{intern.email}</p>
                           </div>
                         </div>
                       </td>
                       <td className="hidden md:table-cell px-5 py-4">
-                        <div className="flex items-center gap-1.5 text-slate-300 text-sm">
+                        <div className="flex items-center gap-1.5 text-slate-700 text-sm">
                           <Building2 size={13} className="text-slate-500" />
                           {intern.companyId?.name || <span className="text-slate-600 italic">Unassigned</span>}
                         </div>
                       </td>
                       <td className="hidden lg:table-cell px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-24 bg-white/5 rounded-full h-1.5 overflow-hidden">
+                          <div className="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden">
                             <div className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" style={{ width: `${progress}%` }} />
                           </div>
                           <span className="text-slate-400 text-xs">{(intern.totalHours || 0).toFixed(1)}h</span>
@@ -135,16 +135,16 @@ export const InternsPage = () => {
       {/* Assign modal */}
       {assignModal?.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#0a1628] border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl p-6 space-y-4">
-            <h2 className="text-white font-semibold">Assign to Company</h2>
-            <p className="text-slate-400 text-sm">{assignModal.intern.firstName} {assignModal.intern.lastName}</p>
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-sm shadow-2xl p-6 space-y-4">
+            <h2 className="text-slate-900 font-semibold">Assign to Company</h2>
+            <p className="text-slate-600 text-sm">{assignModal.intern.firstName} {assignModal.intern.lastName}</p>
             <select value={selectedCompany} onChange={(e) => setSelectedCompany(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-500/60">
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 text-sm focus:outline-none focus:border-indigo-500/60">
               <option value="">Select company...</option>
               {companies.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
             </select>
             <div className="flex gap-3">
-              <button onClick={() => setAssignModal(null)} className="flex-1 py-2.5 text-sm text-slate-400 bg-white/5 hover:bg-white/10 rounded-xl transition-all">Cancel</button>
+              <button onClick={() => setAssignModal(null)} className="flex-1 py-2.5 text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all">Cancel</button>
               <button onClick={handleAssign} disabled={!selectedCompany || assigning} className="flex-1 py-2.5 text-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl transition-all">
                 {assigning ? "Assigning..." : "Assign"}
               </button>

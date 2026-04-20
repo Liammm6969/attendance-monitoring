@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/auth/AuthContext";
 import { attendanceService } from "@/services/attendance/attendance.service";
 import { format } from "date-fns";
-import { FileText, Download, Printer } from "lucide-react";
+import { Download } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -45,8 +45,8 @@ export const StudentReportsPage = () => {
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">My Reports</h1>
-          <p className="text-slate-400 text-sm mt-1">Daily Time Record (DTR)</p>
+          <h1 className="text-2xl font-bold text-slate-900">My Reports</h1>
+          <p className="text-slate-600 text-sm mt-1">Daily Time Record (DTR)</p>
         </div>
         <button
           onClick={handleExportPDF}

@@ -37,12 +37,12 @@ export const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-1">Real-time intern attendance for {format(new Date(), "MMMM d, yyyy")}</p>
+          <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
+          <p className="text-slate-600 text-sm mt-1">Real-time intern attendance for {format(new Date(), "MMMM d, yyyy")}</p>
         </div>
         <div className="flex items-center gap-3">
           <p className="text-slate-500 text-xs">Updated {format(lastUpdated, "h:mm:ss a")}</p>
-          <button onClick={fetchInterns} className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
+          <button onClick={fetchInterns} className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">
             <RefreshCw size={16} />
           </button>
         </div>
@@ -56,37 +56,37 @@ export const AdminDashboard = () => {
           { label: "Timed Out", value: done, icon: Clock, color: "bg-blue-600" },
           { label: "Not Yet In", value: absent, icon: AlertCircle, color: "bg-red-500/80" },
         ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="bg-[#0a1628] border border-white/5 rounded-2xl p-5 flex items-start gap-4 hover:border-indigo-500/30 transition-all duration-300">
+          <div key={label} className="bg-white border border-slate-200 rounded-2xl p-5 flex items-start gap-4 hover:border-indigo-200 transition-all duration-300">
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
               <Icon size={20} className="text-white" />
             </div>
             <div>
-              <p className="text-slate-400 text-xs font-medium">{label}</p>
-              <p className="text-white text-2xl font-bold">{value}</p>
+              <p className="text-slate-500 text-xs font-medium">{label}</p>
+              <p className="text-slate-900 text-2xl font-bold">{value}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Live intern board */}
-      <div className="bg-[#0a1628] border border-white/5 rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-white/5 flex items-center gap-2">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-200 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <h2 className="text-sm font-semibold text-white">Live Attendance Board</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Live Attendance Board</h2>
         </div>
         {loading ? (
           <div className="flex justify-center py-12"><div className="w-7 h-7 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" /></div>
         ) : interns.length === 0 ? (
           <div className="py-12 text-center"><Users size={28} className="text-slate-600 mx-auto mb-2" /><p className="text-slate-500 text-sm">No interns registered yet</p></div>
         ) : (
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-slate-200">
             {interns.map((intern) => (
-              <div key={intern._id} className="flex items-center gap-4 px-5 py-4 hover:bg-white/2 transition-colors">
+              <div key={intern._id} className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                   {intern.firstName?.[0]}{intern.lastName?.[0]}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium truncate">{intern.firstName} {intern.lastName}</p>
+                  <p className="text-slate-900 text-sm font-medium truncate">{intern.firstName} {intern.lastName}</p>
                   <p className="text-slate-500 text-xs truncate">{intern.companyId?.name || "No company assigned"}</p>
                 </div>
                 <div className="hidden sm:block text-right min-w-[80px]">
@@ -95,7 +95,7 @@ export const AdminDashboard = () => {
                 </div>
                 <div className="hidden md:block text-right min-w-[80px]">
                   <p className="text-slate-400 text-xs">{intern.totalHours?.toFixed(1)}h</p>
-                  <div className="w-16 bg-white/5 rounded-full h-1.5 mt-1 overflow-hidden">
+                  <div className="w-16 bg-slate-100 rounded-full h-1.5 mt-1 overflow-hidden">
                     <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${Math.min((intern.totalHours / REQUIRED_HOURS) * 100, 100)}%` }} />
                   </div>
                 </div>

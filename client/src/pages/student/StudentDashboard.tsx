@@ -2,19 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/auth/AuthContext";
 import { attendanceService } from "@/services/attendance/attendance.service";
 import { getSocket } from "@/services/socket/socket.service";
-import { Clock, TrendingUp, Calendar, CheckCircle2, AlertCircle, Timer, MapPin } from "lucide-react";
+import { Clock, TrendingUp, Calendar, CheckCircle2, AlertCircle, Timer, MapPin, Hand, ScanLine, PartyPopper } from "lucide-react";
 import { format } from "date-fns";
 
 const REQUIRED_HOURS = parseFloat(import.meta.env.VITE_REQUIRED_OJT_HOURS || "500");
 
 const StatCard = ({ icon: Icon, label, value, sub, color }: any) => (
-  <div className="bg-[#0a1628] border border-white/5 rounded-2xl p-5 flex items-start gap-4 hover:border-indigo-500/30 transition-all duration-300">
+  <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-start gap-4 hover:border-indigo-200 transition-all duration-300">
     <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
       <Icon size={20} className="text-white" />
     </div>
     <div className="min-w-0">
-      <p className="text-slate-400 text-xs font-medium mb-0.5">{label}</p>
-      <p className="text-white text-xl font-bold">{value}</p>
+      <p className="text-slate-500 text-xs font-medium mb-0.5">{label}</p>
+      <p className="text-slate-900 text-xl font-bold">{value}</p>
       {sub && <p className="text-slate-500 text-xs mt-0.5">{sub}</p>}
     </div>
   </div>
@@ -68,9 +68,10 @@ export const StudentDashboard = () => {
     <div className="space-y-6 max-w-4xl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-slate-900">
           Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 17 ? "afternoon" : "evening"},{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">{user?.firstName}</span> 👋
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">{user?.firstName}</span>{" "}
+          <Hand size={18} className="inline text-amber-500" />
         </h1>
         <p className="text-slate-400 text-sm mt-1">{format(new Date(), "EEEE, MMMM d, yyyy")}</p>
       </div>
@@ -102,7 +103,7 @@ export const StudentDashboard = () => {
             disabled={actionLoading}
             className="px-6 py-2.5 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-red-500/25 active:scale-95"
           >
-            {actionLoading ? "Processing..." : "⏹ Time Out"}
+            {actionLoading ? "Processing..." : "Time Out"}
           </button>
         </div>
       )}
@@ -121,7 +122,10 @@ export const StudentDashboard = () => {
             href="/student/scan"
             className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/25 active:scale-95 text-center"
           >
-            📷 Scan QR
+            <span className="inline-flex items-center justify-center gap-1.5">
+              <ScanLine size={16} />
+              Scan QR
+            </span>
           </a>
         </div>
       )}
@@ -145,34 +149,41 @@ export const StudentDashboard = () => {
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-[#0a1628] border border-white/5 rounded-2xl p-5">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5">
         <div className="flex justify-between items-center mb-3">
-          <p className="text-sm font-semibold text-white">OJT Progress</p>
+          <p className="text-sm font-semibold text-slate-900">OJT Progress</p>
           <span className="text-xs text-slate-400">{totalHours.toFixed(1)} / {REQUIRED_HOURS}h ({progress.toFixed(1)}%)</span>
         </div>
-        <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-700"
             style={{ width: `${progress}%` }}
           />
         </div>
         <p className="text-slate-500 text-xs mt-2">
-          {progress >= 100 ? "🎉 OJT Complete! Congratulations!" : `${(REQUIRED_HOURS - totalHours).toFixed(1)} hours remaining`}
+          {progress >= 100 ? (
+            <span className="inline-flex items-center gap-1.5">
+              <PartyPopper size={14} className="text-indigo-500" />
+              OJT Complete! Congratulations!
+            </span>
+          ) : (
+            `${(REQUIRED_HOURS - totalHours).toFixed(1)} hours remaining`
+          )}
         </p>
       </div>
 
       {/* Today's info */}
       {todayRecord && (
-        <div className="bg-[#0a1628] border border-white/5 rounded-2xl p-5">
-          <h2 className="text-sm font-semibold text-white mb-4">Today's Attendance</h2>
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
+          <h2 className="text-sm font-semibold text-slate-900 mb-4">Today's Attendance</h2>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-slate-400 text-xs mb-1">Time In</p>
-              <p className="text-white font-medium">{format(new Date(todayRecord.timeIn), "h:mm a")}</p>
+              <p className="text-slate-900 font-medium">{format(new Date(todayRecord.timeIn), "h:mm a")}</p>
             </div>
             <div>
               <p className="text-slate-400 text-xs mb-1">Time Out</p>
-              <p className="text-white font-medium">{todayRecord.timeOut ? format(new Date(todayRecord.timeOut), "h:mm a") : "—"}</p>
+              <p className="text-slate-900 font-medium">{todayRecord.timeOut ? format(new Date(todayRecord.timeOut), "h:mm a") : "—"}</p>
             </div>
             <div>
               <p className="text-slate-400 text-xs mb-1">Status</p>
