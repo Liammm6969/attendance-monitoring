@@ -8,17 +8,12 @@ import {
   FormLabel,
   FormControl,
 } from "@/components/ui/form";
-import {
-  CardFooter,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/auth/AuthContext";
 import { useState } from "react";
+
 interface LoginFormValues {
   email: string;
   password: string;
@@ -38,11 +33,10 @@ export const LoginPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect if already authenticated
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b border-foreground opacity-40" />
       </div>
     );
   }
@@ -59,7 +53,7 @@ export const LoginPage = () => {
       await login(values.email, values.password, values.rememberMe);
       navigate("/dashboard");
     } catch (error: any) {
-      setError(error.message || "Login failed. Please check your credentials.");
+      setError(error.message || "Incorrect email or password.");
       console.error("Login failed:", error);
     } finally {
       setIsLoading(false);
@@ -67,24 +61,30 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md p-6 mx-auto">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your credentials to login</CardDescription>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <Card className="w-full max-w-sm border border-border/50 shadow-none rounded-xl p-8">
+        <CardHeader className="p-0 mb-6">
+          <CardTitle className="text-lg font-medium">Welcome back</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground mt-1">
+            Sign in to your account
+          </CardDescription>
         </CardHeader>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm text-muted-foreground font-normal">
+                    Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="example@gmail.com"
+                      placeholder="you@example.com"
+                      className="h-9 bg-muted/40 border-border/50 text-sm"
                       {...field}
                     />
                   </FormControl>
@@ -96,57 +96,73 @@ export const LoginPage = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm text-muted-foreground font-normal">
+                    Password
+                  </FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="*********" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      className="h-9 bg-muted/40 border-border/50 text-sm"
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <div className="flex justify-between items-center">
+
+            <div className="flex items-center justify-between pt-1">
               <FormField
                 control={form.control}
                 name="rememberMe"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormItem className="flex items-center gap-2 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value || false}
                         onCheckedChange={(checked) => field.onChange(checked)}
+                        className="h-3.5 w-3.5"
                       />
                     </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm font-normal cursor-pointer">
-                        Remember me
-                      </FormLabel>
-                    </div>
+                    <FormLabel className="text-sm text-muted-foreground font-normal cursor-pointer">
+                      Remember me
+                    </FormLabel>
                   </FormItem>
                 )}
               />
               <Link
                 to="/forgot-password"
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
               >
-                Forgot Password?
+                Forgot password?
               </Link>
             </div>
+
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 rounded-md">
+              <p className="text-sm text-destructive bg-destructive/10 px-3 py-2.5 rounded-lg">
                 {error}
-              </div>
+              </p>
             )}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+
+            <Button
+              type="submit"
+              className="w-full h-9 text-sm font-medium mt-2"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in…" : "Sign in"}
             </Button>
           </form>
         </Form>
-        <CardFooter className="flex justify-center mt-4">
+
+        <div className="my-6 border-t border-border/40" />
+
+        <CardFooter className="p-0 justify-center">
           <p className="text-sm text-muted-foreground">
-            Doesn't have an account?{" "}
+            No account?{" "}
             <Link
               to="/signup"
-              className="font-medium text-primary hover:underline"
+              className="text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"
             >
               Sign up
             </Link>

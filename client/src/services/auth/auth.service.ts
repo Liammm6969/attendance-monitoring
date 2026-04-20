@@ -1,59 +1,49 @@
-import { api } from "../api/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-export interface LoginPayLoad{
-    email: string;
-    password: string;
-}
-
-export interface SignupPayLoad{
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
-
-export interface ForgotPasswordPayload {
-    email: string;
-}
-
-export interface ResetPasswordPayload {
-    token: string;
-    password: string;
-}
+const handleResponse = async (res: Response) => {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || `Request failed: ${res.status}`);
+  return data;
+};
 
 export const authService = {
-    login: async (payload: LoginPayLoad & { rememberMe?: boolean }) => {
-        return api("/auth/login", {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
-    },
+  login: (credentials: { email: string; password: string; rememberMe?: boolean }) =>
+    fetch(`${API}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    }).then(handleResponse),
 
-    signup: async (payload: SignupPayLoad) => {
-        return api("/auth/signup", {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
-    },
+  signup: (data: { firstName: string; lastName: string; email: string; password: string }) =>
+    fetch(`${API}/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 
-    forgotPassword: async (email: string) => {
-        return api("/auth/forgot-password", {
-            method: "POST",
-            body: JSON.stringify({ email }),
-        });
-    },
+  verifyOtp: (email: string, otp: string) =>
+    fetch(`${API}/auth/verify-signup-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    }).then(handleResponse),
 
-    resetPassword: async (token: string, password: string) => {
-        return api("/auth/reset-password", {
-            method: "POST",
-            body: JSON.stringify({ token, password }),
-        });
-    },
+  forgotPassword: (email: string) =>
+    fetch(`${API}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    }).then(handleResponse),
 
-    verifySignupOtp: async (email: string, otp: string) => {
-        return api("/auth/verify-signup-otp", {
-            method: "POST",
-            body: JSON.stringify({ email, otp }),
-        });
-    },
-}
+  resetPassword: (token: string, password: string) =>
+    fetch(`${API}/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, password }),
+    }).then(handleResponse),
+
+  getMe: (token: string) =>
+    fetch(`${API}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(handleResponse),
+};
