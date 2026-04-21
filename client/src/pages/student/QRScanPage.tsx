@@ -9,7 +9,6 @@ type ScanState = "idle" | "scanning" | "locating" | "submitting" | "success" | "
 export const QRScanPage = () => {
   const navigate = useNavigate();
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<ScanState>("idle");
   const [message, setMessage] = useState("");
   const [scannedValue, setScannedValue] = useState("");
@@ -34,45 +33,50 @@ export const QRScanPage = () => {
   };
 
   const startScanner = () => {
-    if (!containerRef.current || scannerRef.current) return;
+    if (scannerRef.current) return;
     setState("scanning");
     setMessage("");
     setScannedValue("");
 
-    const scanner = new Html5QrcodeScanner(
-      "qr-reader",
-      {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-      },
-      false
-    );
+    try {
+      const scanner = new Html5QrcodeScanner(
+        "qr-reader",
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        },
+        false
+      );
 
-    scanner.render(
-      async (decodedText) => {
-        stopScanner();
-        setScannedValue(decodedText);
-        setState("locating");
-        setMessage("Getting your location...");
+      scanner.render(
+        async (decodedText) => {
+          stopScanner();
+          setScannedValue(decodedText);
+          setState("locating");
+          setMessage("Getting your location...");
 
-        try {
-          const loc = await getLocation();
-          setLocation(loc);
-          setState("submitting");
-          setMessage("Submitting attendance...");
+          try {
+            const loc = await getLocation();
+            setLocation(loc);
+            setState("submitting");
+            setMessage("Submitting attendance...");
 
-          const res = await attendanceService.timeIn(decodedText, loc.lat, loc.lng);
-          setState("success");
-          setMessage(res.message || "Time-in recorded successfully!");
-        } catch (e: any) {
-          setState("error");
-          setMessage(e.message || "Failed to record attendance.");
-        }
-      },
-      (err) => { /* ignore scan errors */ }
-    );
-    scannerRef.current = scanner;
+            const res = await attendanceService.timeIn(decodedText, loc.lat, loc.lng);
+            setState("success");
+            setMessage(res.message || "Time-in recorded successfully!");
+          } catch (e: any) {
+            setState("error");
+            setMessage(e.message || "Failed to record attendance.");
+          }
+        },
+        () => { /* ignore scan errors */ }
+      );
+      scannerRef.current = scanner;
+    } catch (e: any) {
+      setState("error");
+      setMessage(e?.message || "Unable to start camera. Check browser camera permissions.");
+    }
   };
 
   useEffect(() => {
@@ -129,7 +133,7 @@ export const QRScanPage = () => {
 
         {state === "scanning" && (
           <div>
-            <div id="qr-reader" ref={containerRef} className="w-full" />
+            <div id="qr-reader" className="w-full" />
             <div className="p-4 text-center">
               <button onClick={() => { stopScanner(); setState("idle"); }} className="text-sm text-slate-600 hover:text-slate-900 transition-colors">
                 Cancel
